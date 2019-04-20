@@ -1,0 +1,9 @@
+- name: deploy PlexMediaServer
+  hosts: plex
+  vars_files:
+   - vars.yml
+  become: yes
+  become_method: sudo
+  become_user: root
+  roles:
+    - common

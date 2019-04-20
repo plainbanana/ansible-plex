@@ -1,0 +1,15 @@
+--- 
+- name: get latest package url using PlexPASS
+  shell: curl -o /dev/null -Is  https://plex.tv/downloads/latest/5\?channel\=8\&build\=linux-x86_64\&distro\=debian\&X-Plex-Token\={{ plexToken }} -w '%{redirect_url}'
+  register: packageName
+  changed_when: no
+- name: this deb will be installed
+  debug:
+    msg: "{{ packageName.stdout }}"
+- name: install up-to-date plexmediaserver and dependencies
+  apt:
+    deb: "{{ packageName.stdout }}"
+- name: restart plexmediaserver service
+  service: name={{ item }} state=restarted
+  with_items:
+    - plexmediaserver
